@@ -8,6 +8,9 @@ Simple browser extension that adds a CSGORep badge to Steam profile pages. It pu
 - hover popup with rep stats, total reviews, and ban/staff tag
 - works in Firefox + Chrome
 
+## Todo
+- [ ] Make it work with manifest v3
+
 ## Install (dev)
 
 1. Clone the repo
