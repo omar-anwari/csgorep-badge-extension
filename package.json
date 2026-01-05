@@ -1,0 +1,30 @@
+{
+  "name": "csgorep-badge-extension",
+  "version": "1.0.0",
+  "description": "A browser extension that displays a badge on Steam profile pages showing user reputation statistics from the CSGORep API.",
+  "main": "src/background/service-worker.js",
+  "scripts": {
+    "build": "echo 'Build script placeholder'",
+    "test": "echo 'Test script placeholder'"
+  },
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://steamcommunity.com/profiles/*", "https://steamcommunity.com/id/*"],
+      "js": ["src/content/steam-profile.js"]
+    }
+  ],
+  "icons": {
+    "48": "icon.png"
+  },
+  "homepage": "https://github.com/yourusername/csgorep-badge-extension",
+  "author": "Your Name",
+  "license": "MIT"
+}

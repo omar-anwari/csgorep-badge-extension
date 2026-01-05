@@ -1,0 +1,26 @@
+{
+  "extension_name": {
+    "message": "CSGORep Badge Extension",
+    "description": "The name of the extension."
+  },
+  "extension_description": {
+    "message": "Displays user reputation statistics on Steam profile pages.",
+    "description": "A brief description of what the extension does."
+  },
+  "badge_title": {
+    "message": "CSGORep Reputation",
+    "description": "The title of the badge displayed on the Steam profile."
+  },
+  "badge_reputation": {
+    "message": "Reputation: {reputation}",
+    "description": "The text displayed on the badge showing the user's reputation."
+  },
+  "badge_loading": {
+    "message": "Loading reputation...",
+    "description": "Text displayed while the reputation data is being fetched."
+  },
+  "badge_error": {
+    "message": "Error fetching reputation data.",
+    "description": "Text displayed when there is an error fetching the reputation data."
+  }
+}
