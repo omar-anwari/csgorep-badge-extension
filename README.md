@@ -9,9 +9,9 @@ Simple browser extension that adds a CSGORep badge to Steam profile pages. It pu
 - works in Firefox + Chrome
 
 ## Todo
-- [ ] Make it work with manifest v3
+- [ x ] Make it work with manifest v3
 
-## Install (dev)
+## Build / Install (dev)
 
 1. Clone the repo
    ```
@@ -21,9 +21,15 @@ Simple browser extension that adds a CSGORep badge to Steam profile pages. It pu
    ```
    cd csgorep-badge-extension
    ```
-3. Load the `src` folder as an unpacked extension
-   - Chrome: `chrome://extensions/` → enable Developer mode → Load unpacked
-   - Firefox: `about:debugging#/runtime/this-firefox` → Load Temporary Add-on
+3. Build the target you want
+   - Chrome (MV3): `npm run build:chrome` -> load `dist/chrome`
+   - Firefox (MV2): `npm run build:firefox` -> load `dist/firefox`
+
+## Publishing
+
+- Chrome zip: `npm run pack:chrome` -> `dist/csgorep-badge-chrome.zip` (upload to Chrome Web Store)
+- Firefox xpi: `npm run pack:firefox` -> `dist/csgorep-badge-firefox.xpi` (needs AMO signing for permanent install)
+- Both: `npm run pack`
 
 ## Usage
 
@@ -32,7 +38,8 @@ Simple browser extension that adds a CSGORep badge to Steam profile pages. It pu
 
 ## Files
 
-- `src/manifest.json`
+- `src/manifest.json` (Firefox MV2)
+- `src/manifest.chrome.json` (Chrome MV3)
 - `src/content/steam-profile.js`
 - `src/background/background.js`
 - `src/styles/badge.css`

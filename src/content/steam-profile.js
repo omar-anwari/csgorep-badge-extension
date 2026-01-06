@@ -213,7 +213,7 @@
     icon.setAttribute('aria-label', 'CSGORep reputation');
 
     const iconImg = document.createElement('img');
-    iconImg.src = runtimeAPI.getURL('icons/logo.svg');
+    iconImg.src = runtimeAPI.getURL('icons/logo.png');
     iconImg.alt = 'CSGORep';
     iconImg.width = 16;
     iconImg.height = 16;
