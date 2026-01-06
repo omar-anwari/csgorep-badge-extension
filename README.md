@@ -9,7 +9,7 @@ Simple browser extension that adds a CSGORep badge to Steam profile pages. It pu
 - works in Firefox + Chrome
 
 ## Todo
-- [ x ] Make it work with manifest v3
+- [x] Make it work with manifest v3
 
 ## Build / Install (dev)
 
