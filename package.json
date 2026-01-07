@@ -7,7 +7,7 @@
     "build": "node scripts/build.mjs chrome && node scripts/build.mjs firefox",
     "build:chrome": "node scripts/build.mjs chrome",
     "build:firefox": "node scripts/build.mjs firefox",
-    "pack": "npm run pack:chrome && npm run pack:firefox && npm run clean",
+    "pack": "npm run pack:chrome && npm run pack:firefox && rm -rf dist/chrome dist/firefox",
     "pack:chrome": "npm run build:chrome && cd dist/chrome && zip -r ../csgorep-badge-chrome.zip .",
     "pack:firefox": "npm run build:firefox && cd dist/firefox && zip -r ../csgorep-badge-firefox.xpi .",
     "test": "echo 'Test script placeholder'"
