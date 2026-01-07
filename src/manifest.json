@@ -3,21 +3,39 @@
   "name": "CSGORep Badge",
   "version": "1.0.0",
   "description": "Shows CSGORep reputation badge on Steam profile pages",
-  "data_collection_permissions": [],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{7c1b2a4e-9f6d-4a55-8c91-3b1e2f9d4c62}",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  },
   "permissions": [
     "https://api.csgo-rep.com/*",
     "https://steamcommunity.com/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://steamcommunity.com/id/*", "https://steamcommunity.com/profiles/*"],
-      "js": ["content/steam-profile.js"],
-      "css": ["styles/badge.css"],
+      "matches": [
+        "https://steamcommunity.com/id/*",
+        "https://steamcommunity.com/profiles/*"
+      ],
+      "js": [
+        "content/steam-profile.js"
+      ],
+      "css": [
+        "styles/badge.css"
+      ],
       "run_at": "document_idle"
     }
   ],
   "background": {
-    "scripts": ["background/background.js"],
+    "scripts": [
+      "background/background.js"
+    ],
     "persistent": false
   },
   "icons": {
@@ -25,5 +43,7 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "web_accessible_resources": ["icons/logo.png"]
+  "web_accessible_resources": [
+    "icons/logo.png"
+  ]
 }

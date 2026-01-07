@@ -65,29 +65,49 @@
     const badge = document.createElement('div');
     badge.className = 'csgorep-badge';
 
+    const createHeader = () => {
+      const header = document.createElement('div');
+      header.className = 'csgorep-badge__header';
+
+      const logo = document.createElement('span');
+      logo.className = 'csgorep-badge__logo';
+      logo.textContent = 'CSGORep';
+
+      header.appendChild(logo);
+      return header;
+    };
+
     if (data && data.loading) {
       badge.classList.add('csgorep-badge--loading');
-      badge.innerHTML = `
-        <div class="csgorep-badge__header">
-          <span class="csgorep-badge__logo">CSGORep</span>
-        </div>
-        <div class="csgorep-badge__content">
-          <span class="csgorep-badge__loading">Loading...</span>
-        </div>
-      `;
+
+      const header = createHeader();
+      const content = document.createElement('div');
+      content.className = 'csgorep-badge__content';
+
+      const loading = document.createElement('span');
+      loading.className = 'csgorep-badge__loading';
+      loading.textContent = 'Loading...';
+
+      content.appendChild(loading);
+      badge.appendChild(header);
+      badge.appendChild(content);
       return badge;
     }
 
     if (!data || !data.success || !data.profile) {
       badge.classList.add('csgorep-badge--not-found');
-      badge.innerHTML = `
-        <div class="csgorep-badge__header">
-          <span class="csgorep-badge__logo">CSGORep</span>
-        </div>
-        <div class="csgorep-badge__content">
-          <span class="csgorep-badge__status">No profile found</span>
-        </div>
-      `;
+
+      const header = createHeader();
+      const content = document.createElement('div');
+      content.className = 'csgorep-badge__content';
+
+      const status = document.createElement('span');
+      status.className = 'csgorep-badge__status';
+      status.textContent = 'No profile found';
+
+      content.appendChild(status);
+      badge.appendChild(header);
+      badge.appendChild(content);
       return badge;
     }
 
@@ -96,11 +116,7 @@
     const isBanned = ban !== null;
     const roleId = Number(profile.role_id);
     const isStaff = roleId === 3 || roleId === 4;
-    const staffTag = isStaff ? '<span class="csgorep-badge__staff-tag">STAFF</span>' : '';
-    const banTag = isBanned ? '<span class="csgorep-badge__ban-tag">BANNED</span>' : '';
-    const tagsHtml = staffTag || banTag
-      ? `<div class="csgorep-badge__tags">${staffTag}${banTag}</div>`
-      : '';
+    const totalReviews = (reps && typeof reps.total !== 'undefined') ? reps.total : 0;
 
     if (isBanned) {
       badge.classList.add('csgorep-badge--banned');
@@ -112,37 +128,106 @@
       badge.classList.add('csgorep-badge--staff');
     }
 
-    badge.innerHTML = `
-      <a href="https://csgo-rep.com/profile/${profile.steam_id}" target="_blank" class="csgorep-badge__link">
-        <div class="csgorep-badge__header">
-          <span class="csgorep-badge__logo">CSGORep</span>
-          ${tagsHtml}
-        </div>
-        <div class="csgorep-badge__content">
-          <div class="csgorep-badge__stats">
-            <div class="csgorep-badge__stat csgorep-badge__stat--positive">
-              <span class="csgorep-badge__stat-value">+${feedback.positive || 0}</span>
-              <span class="csgorep-badge__stat-label">Positive</span>
-            </div>
-            <div class="csgorep-badge__stat csgorep-badge__stat--neutral">
-              <span class="csgorep-badge__stat-value">${feedback.neutral || 0}</span>
-              <span class="csgorep-badge__stat-label">Neutral</span>
-            </div>
-          </div>
-          <div class="csgorep-badge__breakdown">
-            <span title="Cash trades">💵 ${feedback.cash || 0}</span>
-            <span title="Crypto trades">🪙 ${feedback.crypto || 0}</span>
-            <span title="Balance trades">💰 ${feedback.balance || 0}</span>
-          </div>
-          <div class="csgorep-badge__total">
-            Total Reviews: ${reps.total}
-          </div>
-        </div>
-      </a>
-    `;
+    const link = document.createElement('a');
+    link.href = `https://csgo-rep.com/profile/${profile.steam_id}`;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.className = 'csgorep-badge__link';
+
+    const header = createHeader();
+
+    if (isStaff || isBanned) {
+      const tags = document.createElement('div');
+      tags.className = 'csgorep-badge__tags';
+
+      if (isStaff) {
+        const staffTag = document.createElement('span');
+        staffTag.className = 'csgorep-badge__staff-tag';
+        staffTag.textContent = 'STAFF';
+        tags.appendChild(staffTag);
+      }
+
+      if (isBanned) {
+        const banTag = document.createElement('span');
+        banTag.className = 'csgorep-badge__ban-tag';
+        banTag.textContent = 'BANNED';
+        tags.appendChild(banTag);
+      }
+
+      header.appendChild(tags);
+    }
+
+    const content = document.createElement('div');
+    content.className = 'csgorep-badge__content';
+
+    const stats = document.createElement('div');
+    stats.className = 'csgorep-badge__stats';
+
+    const positive = document.createElement('div');
+    positive.className = 'csgorep-badge__stat csgorep-badge__stat--positive';
+
+    const positiveValue = document.createElement('span');
+    positiveValue.className = 'csgorep-badge__stat-value';
+    positiveValue.textContent = `+${feedback.positive || 0}`;
+
+    const positiveLabel = document.createElement('span');
+    positiveLabel.className = 'csgorep-badge__stat-label';
+    positiveLabel.textContent = 'Positive';
+
+    positive.appendChild(positiveValue);
+    positive.appendChild(positiveLabel);
+
+    const neutral = document.createElement('div');
+    neutral.className = 'csgorep-badge__stat csgorep-badge__stat--neutral';
+
+    const neutralValue = document.createElement('span');
+    neutralValue.className = 'csgorep-badge__stat-value';
+    neutralValue.textContent = `${feedback.neutral || 0}`;
+
+    const neutralLabel = document.createElement('span');
+    neutralLabel.className = 'csgorep-badge__stat-label';
+    neutralLabel.textContent = 'Neutral';
+
+    neutral.appendChild(neutralValue);
+    neutral.appendChild(neutralLabel);
+
+    stats.appendChild(positive);
+    stats.appendChild(neutral);
+
+    const breakdown = document.createElement('div');
+    breakdown.className = 'csgorep-badge__breakdown';
+
+    const cash = document.createElement('span');
+    cash.title = 'Cash trades';
+    cash.textContent = `💵 ${feedback.cash || 0}`;
+
+    const crypto = document.createElement('span');
+    crypto.title = 'Crypto trades';
+    crypto.textContent = `🪙 ${feedback.crypto || 0}`;
+
+    const balance = document.createElement('span');
+    balance.title = 'Balance trades';
+    balance.textContent = `💰 ${feedback.balance || 0}`;
+
+    breakdown.appendChild(cash);
+    breakdown.appendChild(crypto);
+    breakdown.appendChild(balance);
+
+    const total = document.createElement('div');
+    total.className = 'csgorep-badge__total';
+    total.textContent = `Total Reviews: ${totalReviews}`;
+
+    content.appendChild(stats);
+    content.appendChild(breakdown);
+    content.appendChild(total);
+
+    link.appendChild(header);
+    link.appendChild(content);
+    badge.appendChild(link);
 
     return badge;
   }
+
 
   function positionPopover(anchor) {
     const popover = anchor._csgorepPopover;
