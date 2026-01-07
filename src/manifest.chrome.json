@@ -3,6 +3,7 @@
   "name": "CSGORep Badge",
   "version": "1.0.0",
   "description": "Shows CSGORep reputation badge on Steam profile pages",
+  "data_collection_permissions": [],
   "permissions": [],
   "host_permissions": [
     "https://api.csgo-rep.com/*",
