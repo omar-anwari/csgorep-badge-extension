@@ -4,10 +4,13 @@
   "version": "1.0.0",
   "description": "Shows CSGORep reputation badge on Steam profile pages",
   "data_collection_permissions": [],
-  "permissions": [],
+  "permissions": [
+    "storage"
+  ],
   "host_permissions": [
     "https://api.csgo-rep.com/*",
-    "https://steamcommunity.com/*"
+    "https://steamcommunity.com/*",
+    "https://omaranwari.com/*"
   ],
   "content_scripts": [
     {
@@ -32,3 +35,4 @@
     }
   ]
 }
+

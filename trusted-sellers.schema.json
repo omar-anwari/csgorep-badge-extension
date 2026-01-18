@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Trusted Sellers List",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["listVersion", "generatedAt", "sellers"],
+  "properties": {
+    "listVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "issuer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "sellers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/seller"
+      },
+      "minItems": 0
+    }
+  },
+  "$defs": {
+    "seller": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["steamId", "displayName", "status", "reason", "lastReviewedAt"],
+      "properties": {
+        "steamId": {
+          "type": "string",
+          "pattern": "^[0-9]{17}$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "status": {
+          "type": "string",
+          "enum": ["trusted", "flagged"]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 280
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "minItems": 0,
+          "maxItems": 5
+        },
+        "lastReviewedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "addedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 24
+          },
+          "uniqueItems": true,
+          "maxItems": 8
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "url"],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  }
+}
