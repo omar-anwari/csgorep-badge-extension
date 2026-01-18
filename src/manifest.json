@@ -14,10 +14,8 @@
     }
   },
   "permissions": [
-    "storage",
     "https://api.csgo-rep.com/*",
-    "https://steamcommunity.com/*",
-    "https://omaranwari.com/*"
+    "https://steamcommunity.com/*"
   ],
   "content_scripts": [
     {
@@ -49,4 +47,3 @@
     "icons/logo.png"
   ]
 }
-

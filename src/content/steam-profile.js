@@ -1,9 +1,6 @@
 (function() {
   'use strict';
 
-  const TRUSTED_SELLERS_APPLY_URL = 'https://omaranwari.com/trusted-sellers/apply';
-  const TRUSTED_SELLERS_POLICY_URL = 'https://omaranwari.com/trusted-sellers';
-
   // Use browser API (Firefox) or chrome API
   const hasBrowserRuntime = typeof browser !== 'undefined' &&
     browser.runtime &&
@@ -61,131 +58,6 @@
     return null;
   }
 
-  function formatListDate(value) {
-    if (!value) {
-      return 'Unknown';
-    }
-
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) {
-      return value;
-    }
-
-    return date.toLocaleString();
-  }
-
-  function createTrustedSection(trustedData) {
-    const section = document.createElement('div');
-    section.className = 'csgorep-trusted';
-
-    let nameText = 'List unavailable';
-    let reasonText = 'Trusted sellers list is not available.';
-    let metaText = 'List updated: --';
-
-    if (trustedData && trustedData.loading) {
-      nameText = 'Checking list';
-      reasonText = 'Fetching trusted sellers...';
-    } else if (trustedData && trustedData.success) {
-      if (trustedData.seller) {
-        nameText = trustedData.seller.displayName || 'Listed seller';
-        reasonText = trustedData.seller.reason || 'Listed in trusted sellers.';
-      } else {
-        nameText = 'Not listed';
-        reasonText = 'This seller is not in the trusted list.';
-      }
-
-      const listDate = formatListDate(trustedData.generatedAt);
-      const reviewDate = trustedData.seller && trustedData.seller.lastReviewedAt
-        ? formatListDate(trustedData.seller.lastReviewedAt)
-        : null;
-      metaText = reviewDate
-        ? `Reviewed: ${reviewDate} | List: ${listDate}`
-        : `List updated: ${listDate}`;
-
-      if (trustedData.stale) {
-        metaText += ' (stale)';
-      }
-    } else if (trustedData && trustedData.error) {
-      reasonText = trustedData.error;
-    }
-
-    const name = document.createElement('div');
-    name.className = 'csgorep-trusted__name';
-    name.textContent = nameText;
-
-    const reason = document.createElement('div');
-    reason.className = 'csgorep-trusted__reason';
-    reason.textContent = reasonText;
-
-    const meta = document.createElement('div');
-    meta.className = 'csgorep-trusted__meta';
-    meta.textContent = metaText;
-
-    const links = document.createElement('div');
-    links.className = 'csgorep-trusted__links';
-
-    const applyLink = document.createElement('a');
-    applyLink.href = TRUSTED_SELLERS_APPLY_URL;
-    applyLink.target = '_blank';
-    applyLink.rel = 'noopener noreferrer';
-    applyLink.textContent = 'Apply';
-
-    const policyLink = document.createElement('a');
-    policyLink.href = TRUSTED_SELLERS_POLICY_URL;
-    policyLink.target = '_blank';
-    policyLink.rel = 'noopener noreferrer';
-    policyLink.textContent = 'Criteria';
-
-    links.appendChild(applyLink);
-    links.appendChild(policyLink);
-
-    section.appendChild(name);
-    section.appendChild(reason);
-    section.appendChild(meta);
-    section.appendChild(links);
-
-    return section;
-  }
-
-
-  function getTrustedTagData(trustedData) {
-    if (!trustedData || !trustedData.success || !trustedData.seller) {
-      return null;
-    }
-
-    const status = trustedData.status === 'flagged' ? 'flagged' : 'trusted';
-    return {
-      status,
-      label: status === 'flagged' ? 'FLAGGED' : 'TRUSTED'
-    };
-  }
-
-
-  const breakdownIcons = {
-    cash: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.4" fill="none"></circle><path d="M10 5.2H7.6a1.8 1.8 0 0 0 0 3.6h1.1a1.8 1.8 0 0 1 0 3.6H6" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path><line x1="8" y1="3.2" x2="8" y2="12.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></line></svg>',
-    crypto: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 2.8h6L14 8l-3 5.2H5L2 8z" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round"></path><path d="M10.5 5.6a3 3 0 1 0 0 4.8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"></path></svg>',
-    balance: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 5.5h10.5a1.5 1.5 0 0 1 1.5 1.5v3.5a1.5 1.5 0 0 1-1.5 1.5H3a1.5 1.5 0 0 1-1.5-1.5V7A1.5 1.5 0 0 1 3 5.5z" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round"></path><path d="M3 5.5V4.2a1.2 1.2 0 0 1 1.2-1.2h6.4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"></path><circle cx="11.6" cy="9" r="0.9" fill="currentColor"></circle></svg>'
-  };
-
-  function createBreakdownItem(label, value, iconKey) {
-    const item = document.createElement('span');
-    item.className = 'csgorep-badge__breakdown-item';
-    item.title = label;
-
-    const icon = document.createElement('span');
-    icon.className = 'csgorep-badge__icon';
-    icon.innerHTML = breakdownIcons[iconKey] || '';
-
-    const amount = document.createElement('span');
-    amount.className = 'csgorep-badge__breakdown-value';
-    amount.textContent = value;
-
-    item.appendChild(icon);
-    item.appendChild(amount);
-
-    return item;
-  }
-
   /**
    * Create the CSGORep badge on the profile
    */
@@ -205,11 +77,6 @@
       return header;
     };
 
-    const trustedData = data && data.trustedSeller
-      ? data.trustedSeller
-      : (data && data.loading ? { loading: true } : null);
-    const trustedTagData = getTrustedTagData(trustedData);
-
     if (data && data.loading) {
       badge.classList.add('csgorep-badge--loading');
 
@@ -222,7 +89,6 @@
       loading.textContent = 'Loading...';
 
       content.appendChild(loading);
-      content.appendChild(createTrustedSection(trustedData));
       badge.appendChild(header);
       badge.appendChild(content);
       return badge;
@@ -240,7 +106,6 @@
       status.textContent = 'No profile found';
 
       content.appendChild(status);
-      content.appendChild(createTrustedSection(trustedData));
       badge.appendChild(header);
       badge.appendChild(content);
       return badge;
@@ -271,7 +136,7 @@
 
     const header = createHeader();
 
-    if (isStaff || isBanned || trustedTagData) {
+    if (isStaff || isBanned) {
       const tags = document.createElement('div');
       tags.className = 'csgorep-badge__tags';
 
@@ -280,13 +145,6 @@
         staffTag.className = 'csgorep-badge__staff-tag';
         staffTag.textContent = 'STAFF';
         tags.appendChild(staffTag);
-      }
-
-      if (trustedTagData) {
-        const trustedTag = document.createElement('span');
-        trustedTag.className = `csgorep-badge__trusted-tag csgorep-badge__trusted-tag--${trustedTagData.status}`;
-        trustedTag.textContent = trustedTagData.label;
-        tags.appendChild(trustedTag);
       }
 
       if (isBanned) {
@@ -339,9 +197,17 @@
     const breakdown = document.createElement('div');
     breakdown.className = 'csgorep-badge__breakdown';
 
-    const cash = createBreakdownItem('Cash trades', feedback.cash || 0, 'cash');
-    const crypto = createBreakdownItem('Crypto trades', feedback.crypto || 0, 'crypto');
-    const balance = createBreakdownItem('Balance trades', feedback.balance || 0, 'balance');
+    const cash = document.createElement('span');
+    cash.title = 'Cash trades';
+    cash.textContent = `💵 ${feedback.cash || 0}`;
+
+    const crypto = document.createElement('span');
+    crypto.title = 'Crypto trades';
+    crypto.textContent = `🪙 ${feedback.crypto || 0}`;
+
+    const balance = document.createElement('span');
+    balance.title = 'Balance trades';
+    balance.textContent = `💰 ${feedback.balance || 0}`;
 
     breakdown.appendChild(cash);
     breakdown.appendChild(crypto);
@@ -354,7 +220,6 @@
     content.appendChild(stats);
     content.appendChild(breakdown);
     content.appendChild(total);
-    content.appendChild(createTrustedSection(trustedData));
 
     link.appendChild(header);
     link.appendChild(content);
@@ -362,6 +227,7 @@
 
     return badge;
   }
+
 
   function positionPopover(anchor) {
     const popover = anchor._csgorepPopover;
@@ -604,39 +470,21 @@
 
     console.log('CSGORep Badge: Fetching data for', steamId);
 
-    const badgeAnchor = createBadgeAnchor({ loading: true, trustedSeller: { loading: true } });
+    const badgeAnchor = createBadgeAnchor({ loading: true });
     if (!insertBadge(badgeAnchor)) {
       return;
     }
 
     // Fetch data from background script
     try {
-      const [repResult, trustedResult] = await Promise.allSettled([
-        sendRuntimeMessage({
-          action: 'fetchCSGORepData',
-          steamId: steamId
-        }),
-        sendRuntimeMessage({
-          action: 'getTrustedSellerStatus',
-          steamId: steamId
-        })
-      ]);
-
-      const repData = repResult.status === 'fulfilled'
-        ? repResult.value
-        : { success: false, error: 'CSGORep request failed' };
-
-      const trustedData = trustedResult.status === 'fulfilled'
-        ? trustedResult.value
-        : { success: false, error: 'Trusted list request failed' };
-
-      updateBadgeAnchor(badgeAnchor, {
-        ...(repData || { success: false }),
-        trustedSeller: trustedData
+      const response = await sendRuntimeMessage({
+        action: 'fetchCSGORepData',
+        steamId: steamId
       });
+      updateBadgeAnchor(badgeAnchor, response || { success: false });
     } catch (error) {
       console.error('CSGORep Badge: Error fetching data', error);
-      updateBadgeAnchor(badgeAnchor, { success: false, trustedSeller: { success: false } });
+      updateBadgeAnchor(badgeAnchor, { success: false });
     }
   }
 
@@ -646,5 +494,3 @@
     init();
   }
 })();
-
-
