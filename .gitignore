@@ -1,3 +1,5 @@
 .DS_Store
 
 dist/
+trusted-sellers.schema.json
+trusted-sellers.json
